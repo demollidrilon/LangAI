@@ -77,7 +77,7 @@ dotnet test
 
 > Light + Dark mode support with settings panel:
 
-![LangAI Preview](./images/langAI-preview.png)
+![LangAI Preview](docs/ui-preview.gif)
 
 ---
 
