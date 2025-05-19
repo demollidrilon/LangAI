@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lang AI - Say it right, in any language</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="~/images/langAI-icon.png" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Lang AI <img src="~/images/langAI-icon.png" width="25px" height="25px" /></a>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer mt-auto py-4 bg-light">
+        <div class="container text-center">
+            Lang AI - Say it right, in any language.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <div id="floating-controls" class="position-fixed bottom-0 end-0" style="z-index: 1050;">
+        <div class="d-flex flex-column align-items-end gap-3" style="margin-right: 5px">
+            <button id="themeToggleBtn" class="btn" title="Toggle Theme" style="width: 25px; height: 25px;">
+                🌗
+            </button>
+
+            <button id="settingsBtn" class="btn" title="Settings" data-bs-toggle="modal" data-bs-target="#settingsModal" style="width: 25px; height: 25px;">
+                ⚙️
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel" style="font-family: 'Playfair Display'; font-size:16px; font-weight: 600;">UI Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="fontSelector" class="form-label" style="font-family: 'Playfair Display'; font-size:16px; font-weight: 600;">Font Family</label>
+                        <select id="fontSelector" class="form-select">
+                            <option value="Inter">Inter</option>
+                            <option value="Roboto">Roboto</option>
+                            <option value="Playfair Display">Playfair Display</option>
+                            <option value="Georgia">Georgia</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fontSizeSelector" class="form-label" style="font-family: 'Playfair Display'; font-size:16px; font-weight: 600;">Font Size</label>
+                        <input type="range" id="fontSizeSelector" class="form-range" min="12" max="24" step="1">
+                        <span id="fontSizePreview" class="text-muted">16px</span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="resetSettings" style="font-family: 'Playfair Display'; font-size:14px; font-weight: 600;">Reset</button>
+                    <button type="button" class="btn" id="applySettings" disabled style="font-family: 'Playfair Display'; font-size:14px; font-weight: 600;">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fontSelector = document.getElementById("fontSelector");
+        const fontSizeSelector = document.getElementById("fontSizeSelector");
+        const fontSizePreview = document.getElementById("fontSizePreview");
+        const applyBtn = document.getElementById("applySettings");
+        const resetBtn = document.getElementById("resetSettings");
+
+        const textArea = document.getElementById("textToTranslate");
+        const dropdown = document.getElementById("targetLanguage");
+        const translatedTextArea = document.getElementById("translatedText");
+
+        let savedFont = localStorage.getItem("langai_font") || "Inter";
+        let savedSize = localStorage.getItem("langai_font_size") || "16";
+
+        const applyStyles = (font, size) => {
+            if (textArea) {
+                textArea.style.fontFamily = font;
+                textArea.style.fontSize = size + "px";
+            }
+
+            if (dropdown) {
+                dropdown.style.fontFamily = font;
+                dropdown.style.fontSize = size + "px";
+            }
+
+            if (translatedTextArea) {
+                translatedTextArea.style.fontFamily = font;
+                translatedTextArea.style.fontSize = size + "px";
+            }
+        };
+
+        function checkForChanges() {
+            const currentFont = fontSelector.value;
+            const currentSize = fontSizeSelector.value;
+            const hasChanges = currentFont !== savedFont || currentSize !== savedSize;
+            applyBtn.disabled = !hasChanges;
+        }
+
+        const loadSettings = () => {
+            fontSelector.value = savedFont;
+            fontSizeSelector.value = savedSize;
+            fontSizePreview.textContent = savedSize + "px";
+            applyStyles(savedFont, savedSize);
+            checkForChanges();
+        };
+
+        fontSizeSelector.addEventListener("input", () => {
+            fontSizePreview.textContent = fontSizeSelector.value + "px";
+            checkForChanges();
+        });
+
+        fontSelector.addEventListener("change", checkForChanges);
+
+        applyBtn.addEventListener("click", () => {
+            const font = fontSelector.value;
+            const size = fontSizeSelector.value;
+
+            localStorage.setItem("langai_font", font);
+            localStorage.setItem("langai_font_size", size);
+
+            applyStyles(font, size);
+            checkForChanges();
+        });
+
+        resetBtn.addEventListener("click", () => {
+            savedFont = "Inter";
+            savedSize = "16";
+
+            localStorage.removeItem("langai_font");
+            localStorage.removeItem("langai_font_size");
+
+            fontSelector.value = savedFont;
+            fontSizeSelector.value = savedSize;
+            fontSizePreview.textContent = savedSize + "px";
+
+            applyStyles(savedFont, savedSize);
+            checkForChanges();
+        });
+
+        loadSettings();
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+
+        const applyTheme = (mode) => {
+            if (mode === "dark") {
+                document.body.classList.add("dark-mode");
+                localStorage.setItem("langai_theme", "dark");
+                themeToggleBtn.innerText = "☀️";
+            } else {
+                document.body.classList.remove("dark-mode");
+                localStorage.setItem("langai_theme", "light");
+                themeToggleBtn.innerText = "🌗";
+            }
+        };
+
+        const toggleTheme = () => {
+            const isDark = document.body.classList.contains("dark-mode");
+            applyTheme(isDark ? "light" : "dark");
+        };
+
+        // Attach toggle event
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener("click", toggleTheme);
+        }
+
+        // Load persisted theme
+        const savedTheme = localStorage.getItem("langai_theme") || "light";
+        applyTheme(savedTheme);
+    });
+</script>

@@ -1,0 +1,49 @@
+﻿@model LangAI.Application.DTOs.TranslationRequestDTO
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg rounded-3 p-4">
+                <form method="post" asp-action="FetchAIReponse">
+                    <div class="form-group mb-3">
+                        <textarea asp-for="TextToTranslate" id="textToTranslate" class="form-control" rows="4" placeholder="Type something..."></textarea>
+                        <span class="text-danger" asp-validation-for="TextToTranslate"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label">Select language</label>
+                        <select asp-for="TargetLanguage" id="targetLanguage" class="form-control">
+                            <option value="">Choose a language</option>
+                            @foreach (var lang in LangAI.Application.Configurations.SupportedLanguages.All)
+                            {
+                                <option value="@lang">@lang</option>
+                            }
+                        </select>
+                        <span class="text-danger" asp-validation-for="TargetLanguage"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-dark" id="translateBtn">
+                            Translate
+                            <img src="~/images/langAI-icon.png" width="20px" height="20px" class="ms-2" style="filter: brightness(0) invert(1);" />
+                        </button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrEmpty(ViewBag.Result))
+                {
+                    <div class="translation-result mt-4">
+                        <div class="alert alert-success custom-response-box">
+                            @Html.Raw(ViewBag.Result)
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
