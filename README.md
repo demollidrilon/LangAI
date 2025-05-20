@@ -1,22 +1,22 @@
-# 🌍 LangAI — Say it right, in any language
+# LangAI — Say it right, in any language
 
 LangAI is a clean, full-stack .NET-based application that leverages the OpenAI GPT API to provide accurate and natural language translations. It features a minimal yet beautiful UI with dark mode support, Redis caching, unit testing, and flexible UI customization options.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🌐 Translate any text using OpenAI GPT-3.5
-- ⚡ Redis caching (optional but supported)
-- 🌓 Dark Mode Toggle
-- 🛠️ Font & size customization in UI
-- 🧪 Unit Tested Core Logic (TranslationService)
-- 🧼 Clean Architecture: API / Application / Infrastructure / Domain / Tests
-- 📦 Ready to deploy & easy to extend
+- Translate any text using OpenAI GPT-3.5
+- Redis caching (optional but supported)
+- Dark Mode Toggle
+- Font & size customization in UI
+- Unit Tested Core Logic (TranslationService)
+- Clean Architecture: API / Application / Infrastructure / Domain / Tests
+- Ready to deploy & easy to extend
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 LangAI/
@@ -31,7 +31,7 @@ LangAI/
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 1. Clone the repo
 
@@ -65,7 +65,7 @@ Then go to: `https://localhost:7102`
 
 ---
 
-## 🧪 Run Unit Tests
+## Run Unit Tests
 
 ```
 dotnet test
@@ -73,7 +73,7 @@ dotnet test
 
 ---
 
-## 🖼️ UI Preview
+## UI Preview
 
 > Light + Dark mode support with settings panel:
 
@@ -81,7 +81,7 @@ dotnet test
 
 ---
 
-## 🧠 Built With
+## Built With
 
 - ASP.NET Core MVC (.NET 9 Preview)
 - Clean Architecture (SOLID-friendly)
@@ -92,6 +92,6 @@ dotnet test
 
 ---
 
-## 📄 License
+## License
 
 MIT - free for personal and commercial use.
