@@ -10,7 +10,7 @@ public static class SerilogConfig
             lc.ReadFrom.Configuration(ctx.Configuration)
               .Enrich.FromLogContext()
               .WriteTo.Console()
-              .WriteTo.File("Logs/langai.log", rollingInterval: RollingInterval.Day);
+              .WriteTo.File("Logs/LangAI.log", rollingInterval: RollingInterval.Day);
         });
     }
 }

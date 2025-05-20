@@ -105,8 +105,7 @@ public class TranslationServiceTests
         });
 
         var mockCache = new Mock<IDistributedCache>();
-        mockCache.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-         .ReturnsAsync((byte[])null);
+        mockCache.Setup(c => c.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync((byte[])null);
 
         var mockLogger = new Mock<ILogger<TranslationService>>();
 

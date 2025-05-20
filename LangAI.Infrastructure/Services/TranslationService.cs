@@ -50,7 +50,7 @@ public class TranslationService : ITranslationService
             {
                     new { role = "system", content = $"You are a professional translator. Translate the following text to {targetLanguage}." },
                     new { role = "user", content = text }
-                },
+            },
             temperature = _options.Temperature,
             max_tokens = _options.MaxTokens
         };
@@ -62,8 +62,7 @@ public class TranslationService : ITranslationService
         if (!response.IsSuccessStatusCode)
             return "Translation failed. Please try again later.";
 
-        var result = JsonConvert.DeserializeObject<TranslationResponseDTO>(
-        await response.Content.ReadAsStringAsync());
+        var result = JsonConvert.DeserializeObject<TranslationResponseDTO>(await response.Content.ReadAsStringAsync());
 
         var translatedText = result?.Choices?[0]?.Message?.Content ?? "Translation not available.";
 
